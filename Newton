@@ -18,48 +18,27 @@ public final class Newton4 {
     }
 
     /**
-     * Computes estimate of square root of x to within relative error 0.01%.
+     * Computes estimate of square root of x to within relative error given by
+     * user.
      *
      * @param x
-     *            positive number to compute square root of
+     *            number greater than or equal zero to compute square root of
      *
      * @param epsilon
-     *            epsilon provided by user
+     *            epsilon provided by user expected to be positive
      * @return estimate of square root
      */
     private static double sqrt(double x, double epsilon) {
         double r = x;
 
-        // Calculate the absolute difference between r*r and x
-        double y = ((r * r) - x);
-
-        // Ensure y is positive
-        if (y < 0) {
-            y = -y;
-        }
-
         // Handle zero case to avoid division by zero
-        double div;
-        if (x == 0) {
-            div = 0;
-        } else {
-            // Use multiplicative inverse to avoid division
-            div = 1 / x;
-        }
-
-        // Iteratively improve the estimate until the relative error is within epsilon
-        while (y * div > epsilon * epsilon) {
-            // Update estimate using Newton's method
-            r = (r + (x / r)) / 2;
-            y = (r * r) - x;
-
-            // Ensure y is positive
-            if (y < 0) {
-                y = -y;
+        if (r != 0) {
+            // Iteratively improve the estimate until the error is within the
+            //specified tolerance
+            while (Math.abs((r * r) - x) / x > epsilon * epsilon) {
+                r = (r + (x / r)) / 2;
             }
-
         }
-
         return r;
     }
 
@@ -84,7 +63,7 @@ public final class Newton4 {
         double number = in.nextDouble();
 
         // Process each number until a negative number is entered
-        while (number > 0.0) {
+        while (number >= 0.0) {
 
             // Compute and display the square root
             double answer = sqrt(number, epsilon);
